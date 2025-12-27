@@ -1,0 +1,150 @@
+--------------------------------------------------
+-- TASK A4 : ALTER TABLE
+--------------------------------------------------
+
+-- Add loyalty level for customers
+ALTER TABLE customers
+ADD COLUMN loyalty_level VARCHAR(20);
+
+-- Increase price column precision
+ALTER TABLE medicines
+ALTER COLUMN price TYPE NUMERIC(12,2);
+
+-- Add unique constraint to employee email
+ALTER TABLE employees
+ADD CONSTRAINT unique_employee_email UNIQUE (email);
+
+
+--------------------------------------------------
+-- TASK B1 : WHERE FILTER QUERIES
+--------------------------------------------------
+
+-- Medicines with low stock
+SELECT medicine_name, stock_quantity
+FROM medicines
+WHERE stock_quantity < 10;
+
+-- Expired medicines
+SELECT medicine_name, expiry_date
+FROM medicines
+WHERE expiry_date < CURRENT_DATE;
+
+-- Sales made by a specific employee
+SELECT *
+FROM sales
+WHERE employee_id = 1;
+
+-- Customers who have phone numbers
+SELECT *
+FROM customers
+WHERE phone IS NOT NULL;
+
+-- Expensive medicines
+SELECT medicine_name, price
+FROM medicines
+WHERE price > 1000;
+
+
+--------------------------------------------------
+-- TASK B2 : STRING FUNCTIONS
+--------------------------------------------------
+
+-- Convert medicine names to uppercase
+SELECT UPPER(medicine_name)
+FROM medicines;
+
+-- Convert customer names to lowercase
+SELECT LOWER(customer_name)
+FROM customers;
+
+-- Combine employee name and role
+SELECT CONCAT(employee_name, ' - ', role)
+FROM employees;
+
+-- Extract first 5 characters of medicine name
+SELECT SUBSTRING(medicine_name FROM 1 FOR 5)
+FROM medicines;
+
+-- Remove spaces from customer names
+SELECT TRIM(customer_name)
+FROM customers;
+
+
+--------------------------------------------------
+-- TASK B3 : DATE FUNCTIONS
+--------------------------------------------------
+
+-- Sales from the last 30 days
+SELECT *
+FROM sales
+WHERE sale_date >= CURRENT_DATE - INTERVAL '30 days';
+
+-- Days left until medicine expiry
+SELECT medicine_name, expiry_date - CURRENT_DATE AS days_left
+FROM medicines;
+
+-- Extract year from sale date
+SELECT EXTRACT(YEAR FROM sale_date)
+FROM sales;
+
+-- Extract month from sale date
+SELECT EXTRACT(MONTH FROM sale_date)
+FROM sales;
+
+-- Current date
+SELECT CURRENT_DATE;
+
+
+--------------------------------------------------
+-- TASK B4 : UPDATE QUERIES
+--------------------------------------------------
+
+-- Increase price of antibiotics by 10%
+UPDATE medicines
+SET price = price * 1.10
+WHERE category_id = 1;
+
+-- Set loyalty level for a customer
+UPDATE customers
+SET loyalty_level = 'Gold'
+WHERE customer_id = 1;
+
+-- Restock a medicine
+UPDATE medicines
+SET stock_quantity = stock_quantity + 50
+WHERE medicine_id = 1;
+
+-- Promote an employee
+UPDATE employees
+SET role = 'Senior Pharmacist'
+WHERE employee_id = 1;
+
+-- Correct sale total
+UPDATE sales
+SET total_amount = total_amount + 500
+WHERE sale_id = 1;
+
+
+--------------------------------------------------
+-- TASK B5 : DELETE QUERIES
+--------------------------------------------------
+
+-- Delete sales with zero amount
+DELETE FROM sales
+WHERE total_amount = 0;
+
+-- Delete customers without phone numbers
+DELETE FROM customers
+WHERE phone IS NULL;
+
+-- Delete medicines with no stock
+DELETE FROM medicines
+WHERE stock_quantity = 0;
+
+-- Delete invalid sale details
+DELETE FROM sale_details
+WHERE quantity <= 0;
+
+-- Delete employees without email
+DELETE FROM employees
+WHERE email IS NULL;
